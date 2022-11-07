@@ -1,5 +1,6 @@
 countdown: counter
 example: cexample
+uart: cuart
 
 counter: display.o
 	gcc -o display display.o
@@ -21,3 +22,6 @@ lib/utils.o: lib/utils.s
 
 cexample: examples/countdown.c lib/lcd.s
 	gcc -o countdown examples/countdown.c lib/lcd.s
+
+cuart: uart/uart.c lib/lcd.s
+	gcc -o uartx uart/uart.c lib/lcd.s -lwiringPi
