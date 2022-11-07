@@ -59,31 +59,17 @@ cuart: uart/uart.c lib/lcd.s
 
 Abaixo está presente os dispositivos utilizados, suas características e documentação utilizada para desenvolvimento do projeto
 
+# NodeMCU
+A plataforma NodeMCU é uma placa de desenvolvimento que combina o chip ESP8266, uma interface usb-serial e um regulador de tensão 3.3V.  Mais dados sobre sua documentação podem ser encontrados [aqui](https://nodemcu.readthedocs.io/en/release/).
+
+
 ## Raspberry Pi Zero
-Baseada no processador [BCM 2385](https://datasheets.raspberrypi.com/bcm2835/bcm2835-peripherals.pdf), possui 54 I/O de propósito geral (GPIO), onde atualmente se faz uso de apenas 6. É importante notar que, o GPIO 1 não está posicionado no PINO 1. As informações da placa são mostradas na tabela abaixo, junto da descrição sobre o uso de cada GPIO.
+Baseada no processador [BCM 2385](https://datasheets.raspberrypi.com/bcm2835/bcm2835-peripherals.pdf), possui 54 I/O de propósito geral (GPIO), além daqueles utilizados para comunicação com o display, estão sendo utilizados mais dois para comunicação serial: TX/RX. É importante notar que, o GPIO 1 não está posicionado no PINO 1. As informações da placa são mostradas na tabela abaixo, junto da descrição sobre o uso de cada GPIO.
 
 | Pino | GPIO | Descrição |
 | - | - | - |
-| 28 | 1 | Sinal de Enable |
-| 29 | 5 | Push Button 1 |
-| 35 | 19 | Push Button 2 |
-| 32 | 12 | D4 |
-| 36 | 16 | DB5 |
-| 38 | 20 | DB6 |
-| 40 | 21 | DB7 |
-| 22 | 25 | Sinal RS |
-### Endereços de Memória
-
-| Endereço | Descrição |
-| - | - | 
-| 0x20200000 | Endereço base da GPIO / Modo de seleção I/O GPIO 0-9 |
-| 0x20200004 | Modo de seleção I/O GPIO 10-19 |
-| 0x20200008 | Modo de seleção I/O GPIO 20-29 |
-| 0x2020001c | Escrita HIGH GPIO 0-31 |
-| 0x20200028 | Escrita LOW GPIO 0-31 |
-| 0x20200034 | Leitura GPIO 0-31 |
-
-No caso da utilização do mmap2, o último parâmetro é o offset da memória em número de paginas. Se o tamanho da página for 0x1000, o endereço base acima vai ser: 0x20200.
+| 8 | 14 | TX |
+| 10 | 15 | RX |
 
 ## Display LCD 16x2
 Dentro de um espaço de 16 colunas e 2 linhas, baseado no controlador [HD44780](https://www.sparkfun.com/datasheets/LCD/HD44780.pdf), o display lcd permite a criação de uma interface amigável, possibilitando a exibição de vários tipos de informações. Este display possui dois modos de ação: 4 bits ou 8 bits. Atualmente, esta biblioteca usa apenas o modo de quatro bits.
