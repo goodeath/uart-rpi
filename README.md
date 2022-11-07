@@ -84,29 +84,7 @@ Baseada no processador [BCM 2385](https://datasheets.raspberrypi.com/bcm2835/bcm
 
 ### Rotina de Inicialização
 
-Para realizar a inicialização completa do display, é preciso executar os seguintes passos:
-
-| E | DB7 | DB6 | DB5 | D4 |
-| - | - | - | - | - |
-|  ⎍  | 0 | 0 | 1 | 1 |
-|  ⎍  | 0 | 0 | 1 | 1 |
-|  ⎍  | 0 | 0 | 1 | 1 |
-|  ⎍  | 0 | 0 | 1 | 0 |
-|  ⎍  | 0 | 0 | 1 | 0 |
-|  ⎍  | 1 | 0 | 0 | 0 |
-|  ⎍  | 0 | 0 | 0 | 0 |
-|  ⎍  | 1 | 0 | 0 | 0 |
-|  ⎍  | wait | 5 | m | s |
-|  ⎍  | 0 | 0 | 0 | 0 |
-|  ⎍  | 0 | 0 | 0 | 1 |
-|  ⎍  | wait | 5 | m | s |
-|  ⎍  | 0 | 0 | 0 | 0 |
-|  ⎍  | 0 | 1 | 1 | 0 |
-|  ⎍  | wait | 5 | m | s |
-|  ⎍  | 0 | 0 | 0 | 0 |
-|  ⎍  | 1 | 1 | 1 | 1 |
-
-As transições são reconhecidas nas bordas de descida.
+Devido a alguns lixos gerados na saída serial da NodeMCU foi realizado um processo de inicialização. Quando a raspberry pi inicia, fica aguardando o envio de um conjunto de palavras em sequência específica para identificar que a inicialização foi feita com sucesso. 
 
 # Comandos
 Para troca de informações entre os dispositivos, foram definidos comandos. Cada informação é enviada com 1 byte, onde os três bits mais significativos indicam um comando:
