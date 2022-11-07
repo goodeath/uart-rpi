@@ -1,5 +1,5 @@
 # Introdução
-Assembly LCD é uma biblioteca de controle de display LCDs baseados no modelo Hitachi HD44780U, possibilitando o seu uso sem a necessidade de implementar os detalhes associados a comunicação. Baseado na Raspberry Pi Zero e sua arquitetura Arm V6, é possível limpar o display, escrever um caractere e posicionar o cursor (linha e coluna). Além disso, no diretório examples/ há um programa que demonstra seu uso.
+UART-RPI é um projeto de comunicação serial utilizando a Raspberry Pi e o NodeMCU através da UART. Apesar de ser uma comunicação de curto alcance e em geral lenta, ecom esta integração, é possível recuperar informações de sensores instalados no NodeMCU e transmiti-los para a raspberry. É importante por alguns motivos, entre eles, a aquisição de dados dos sensores é mais simples ser realizada na NodeMCU e também, na disponibilidade de outro sistema de aquisição, neste caso, mais barato, conseguimos economizar GPIOs do nosso sistema central. 
 
 
 # Estrutura do projeto
