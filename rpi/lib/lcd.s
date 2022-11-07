@@ -89,12 +89,16 @@ write_number:
 
 
 
-@.syntax unified
+.syntax unified
 write_char:
     PUSH {R0-R2, LR}
     TurnOn RS
     CMP R0, #32
     BEQ 1f
+
+    CMP R0, #57
+    BLE 2f
+
     MOV R1, R0
     LDR R0, =97
     SUB R1, R1, R0
@@ -114,6 +118,14 @@ write_char:
     write_4bit 0x8
     write_4bit 0x0
     POP {R0, R1, R2, PC}
+2:
+    MOV R1, R0
+    LDR R0, =0x3
+    BL write_4bit2
+    MOV R0, R1
+    SUB R0, #48
+    BL write_4bit2
+    POP {R0, R1, R2, PC}
  
 .macro display_clear
     TurnOff RS
@@ -132,7 +144,7 @@ display_clear2:
     BX LR
 
 
-@.syntax unified
+.syntax unified
 clear_display:
     PUSH {LR}
     BL display_clear2
@@ -140,7 +152,7 @@ clear_display:
     BX LR
 
 @ Initialize Display
-@.syntax unified
+.syntax unified
 init:
     PUSH {LR}
     open_file devmem
