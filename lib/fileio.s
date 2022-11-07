@@ -1,6 +1,5 @@
-.section .text
-
 .equ sys_open, 5
+.section .text
 @ File IO
 @ This module opens a file. 
 @ Its used to open /dev/mem
