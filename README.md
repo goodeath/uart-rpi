@@ -99,16 +99,8 @@ Os bits mais significativos B7-B3, indicam qual sensor vai ser executado o coman
 
 
 # Arquitetura
-A arquitetura utilizada é a ArmV6 presente na Raspberry Pi Zero, pertencente a família de processadores RISC. A Raspberry Pi Zero utiliza o processador BCM 2835, que é um processador de 32 bits e seu programa pode ser executado em versões mais recentes, pois o ArmV7 e ArmV8 possui retrocompatibilidade com o ArmV6.
-
-Os registradores da arquitetura Arm é composta por:
-- 13 registradores (R0-R12) de uso geral;
-- 1 Stack Pointer (SP);
-- 1 Link Register (LR);
-- 1 Program Counter (PC);
-- 1 Application Program Status Register APSR
-
-Se tratando do sistema operacional, registradores podem ter usos específicos, cuidado! Por exemplo, no Raspberry Pi OS, a função de sistema é escolhida colocando seu identificador no R7, e seu retorno está presente no R0 após a chamada da função.
+Como mostrado na figura, temos a SBC controlando a exibição de informações no display, enquanto se comunica através da uart com a NodeMCU que possui e faz a aquisição dos dados dos sensores.
+![image](https://user-images.githubusercontent.com/26310730/200289359-d2724ca6-85cb-48ff-bf14-99044af3eb83.png)
 
 
 # Funcionamento
