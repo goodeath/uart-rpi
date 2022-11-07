@@ -120,6 +120,7 @@ A NodeMCU fica constantemente ouvindo o seu canal RX, e toda vez que recebe um p
 
 ## Raspberry PI
 
+Pode-se emitir os comandos através do terminal, onde são enviados e processados pela NodeMCU através de comunicação serial utilizando o protocolo UART. Como o processo é assíncrono, é realizada uma espera ocupada de até 1 segundo (aproximadamente), de forma que se não houver nenhum tipo de resposta, é dado como um erro de tempo excedido (timeout).  vez que a informação retorne, ela é exibida no terminal e no display de LCD caso esteja conectado.
 Devido a presença de sistema operacional na Raspberry Pi Zero, para realizar um acesso aos dispositivos presentes na placa, é necessário realizar o mapeamento de memória, onde é exigido a chamada de algumas system calls para realizar esse acesso. Para outros dispositivos, como o acionamento do relógio interno, o sistema operacional oferece uma interface amigável.
 
 # Como executar
