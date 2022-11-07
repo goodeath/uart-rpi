@@ -62,6 +62,16 @@ Abaixo está presente os dispositivos utilizados, suas características e docume
 # NodeMCU
 A plataforma NodeMCU é uma placa de desenvolvimento que combina o chip ESP8266, uma interface usb-serial e um regulador de tensão 3.3V.  Mais dados sobre sua documentação podem ser encontrados [aqui](https://nodemcu.readthedocs.io/en/release/).
 
+Alguns pinos utilizados na NodeMCU estão listados na tabela abaixo:
+
+| Pino | Descrição |
+| - |  - |
+| D0 | Sensor Digital 1 |
+| D1 | Sensor Digital 2 |
+| A0 | Sensor Analógico 1 |
+| TX | Envio comunicação serial |
+| RX | Recebimento comunicação serial |
+
 
 ## Raspberry Pi Zero
 Baseada no processador [BCM 2385](https://datasheets.raspberrypi.com/bcm2835/bcm2835-peripherals.pdf), possui 54 I/O de propósito geral (GPIO), além daqueles utilizados para comunicação com o display, estão sendo utilizados mais dois para comunicação serial: TX/RX. É importante notar que, o GPIO 1 não está posicionado no PINO 1. As informações da placa são mostradas na tabela abaixo, junto da descrição sobre o uso de cada GPIO.
