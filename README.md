@@ -135,7 +135,7 @@ Devido a presença de sistema operacional na Raspberry Pi Zero, para realizar um
 
 # Resultados
 
-![contagem ocorrendo](result.gif)
+![contagem ocorrendo](https://imgur.com/CU5IrQK)
 
 O protótipo construído é um sistema digital utilizando plataformas de desenvolvimento IoT, em que se pode adicionar até 32 sensores analógicos e/ou digitais e exibir as respectivas informações em um display de LCD.
 
