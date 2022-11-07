@@ -240,13 +240,10 @@ Posiciona o cursor na linha x (0-1) e na coluna y (0-15)
 
 O protótipo construído é um contador de 2 digitos, onde é possível configurar seu valor diretamente no código, possibilitando diferentes tempos. Ainda, é possível utilizar dois botões de controle. Um botão para pausar/iniciar a contagem, onde sua função alterna a cada pressionamento. E um botão para reiniciar a contagem, onde é acionado apenas uma vez após o pressionamento, necessitando assim soltar o botão antes de realizar um novo reinício.
 
-## Limitações
+## Limitações da UART
 
-### Quantidade de dígitos
-Não é possível escrever um número maior que dois digitos. Foi implementado um algoritmo de divisão por subtrações sucessívas, para realizar a separação dos dígitos decimais a partir do valor binário. Para a separação de múltiplos dígitos, seria necessário realizar uma abstração maior. Uma maneira de alcançar esse resultado, é dividir por 10, pegar o resto que é nosso último dígito, e subtrair do número original. Em seguida, dividir por 100, pegar o resto que é o penúltimo digito, e subtrair do original. Seguindo esses passos até o número se tornar zero. Pode-se empilhar os valores de forma, que sejam exibidos na ordem correta.
+### Quantidade de dispositivos
+A comunicação serial, apesar de simples, mas só permite a comunicação entre dois dispositivos. Caso seja necessário enviar ou receber informações de mais dispositivo se torna inviável, necessitando do uso de outros protocolos, como o caso do i2c;
 
-### Acionamento dos botões
-Os botões só são reconhecidos entre a contagem de dois números. Como foi utilizado um nanosleep de 1 segundo, enquanto há espera, os botões não reagem. Uma forma de solucionar este problema é realizar n = 1000/t  chamadas de t milissegundos, de forma que entre cada espera menor, os botões sejam checados
-
-### Precisão
-O tempo de espera não é preciso. Pois, é feito utilizando uma chamada ao sistema operacional que, vai aguardar no mínimo o tempo solicitado, mas, devido a processos internos, pode não retornar ao processo no tempo exato, adicionando assim, alguns atrasos que dentro do projeto não causam impactos maiores,mas, em diversas outras situações pode ser significativo
+### Velocidade
+Comparado a protocolos como i2c e SPI, pode haver uma diferença de velocidade de até 10 vezes, fazendo o protocolo UART ser mais lento e algumas vezes inviável dependendo da aplicação.
