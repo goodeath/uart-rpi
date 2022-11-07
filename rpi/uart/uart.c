@@ -20,7 +20,7 @@ char key[6] = {'u', 'n', 'l', 'o', 'c', 'k'};
  * Initialize Uart
  */ 
 int init_uart(){
-    int serial_port = serialOpen("/dev/ttyS0", BAUD_RATE);
+    int serial_port = serialOpen("/dev/serial0", BAUD_RATE);
     if (serial_port < 0) {
         fprintf(stderr, "Unable to open serial device: %s\n", strerror(errno));
         return 0;
@@ -43,7 +43,7 @@ int busy_wait(int serial_port){
         printf("Timeout...\n");
         return 0;
     }
-    return serialDataAvail;
+    return 1;
 }
 
 
@@ -79,12 +79,12 @@ int main()
         if(!response) continue;
         clear_display();
         
-        char *msg = "sensor ";
+        char*msg = "sensor ";
         for(int i=0;i<7;i++) write_char(msg[i]);
         write_char('0' + (cmd>>3)/10);
         write_char('0' + (cmd>>3)%10);
-        for(int i=0;i<11;i++) write_char(' ');
-        *msg = "valor "
+        for(int i=0;i<31;i++) write_char(' ');
+        msg = "valor ";
         for(int i=0;i<6;i++) write_char(msg[i]);
 
         while(serialDataAvail(serial_port)){
