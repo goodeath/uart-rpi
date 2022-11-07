@@ -6,7 +6,7 @@ UART-RPI é um projeto de comunicação serial utilizando a Raspberry Pi e o Nod
 Segue abaixo a estrutura de diretórios do projeto
 ```
 ├── nodemcu
-│   └── sketch_oct30a.ino
+│   └── uart.ino
 ├── README.md
 └── rpi
     ├── display.s
@@ -71,8 +71,6 @@ Baseada no processador [BCM 2385](https://datasheets.raspberrypi.com/bcm2835/bcm
 | 8 | 14 | TX |
 | 10 | 15 | RX |
 
-## Display LCD 16x2
-Dentro de um espaço de 16 colunas e 2 linhas, baseado no controlador [HD44780](https://www.sparkfun.com/datasheets/LCD/HD44780.pdf), o display lcd permite a criação de uma interface amigável, possibilitando a exibição de vários tipos de informações. Este display possui dois modos de ação: 4 bits ou 8 bits. Atualmente, esta biblioteca usa apenas o modo de quatro bits.
 
 ### Rotina de Inicialização
 
@@ -109,7 +107,7 @@ Para troca de informações entre os dispositivos, foram definidos comandos. Cad
 | 0 | 1 | 0 | Solicita status do sensor | 
 | 0 | 1 | 1 | Solicita valor do sensor | 
 
-Já os bits mais significativos B7-B3, indicam qual sensor vai ser executado o comando: 0 - 31 (32 sensores).
+Os bits mais significativos B7-B3, indicam qual sensor vai ser executado o comando: 0 - 31 (32 sensores).
 
 
 # Arquitetura
@@ -211,23 +209,20 @@ Posiciona o cursor na linha x (0-1) e na coluna y (0-15)
 
 # Como executar
 
-### Contador
-1. Na pasta execute:
+### UART - Raspberry Pi
+1. Na pasta rpi/ execute:
 
-`$ make countdown`
-
-2. Em seguida execute o programa
-
-`$ sudo ./display`
-
-### Exemplo
-1. Na pasta execute:
-
-`$ make example`
+`$ make uart`
 
 2. Em seguida execute o programa
 
-`$ sudo ./countdown`
+`$ sudo ./uartx`
+
+### UART - NodeMCU
+1. Na pasta nodemcu/ abra o arquivo uart.ino na Arduino IDE:
+2. Configure as bibliotecas do NodeMCU
+3. Descarregue o código na pltaforma
+
 
 # Resultados
 
