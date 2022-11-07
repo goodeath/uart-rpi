@@ -100,28 +100,16 @@ Para realizar a inicialização completa do display, é preciso executar os segu
 
 As transições são reconhecidas nas bordas de descida.
 
-### Comandos
+# Comandos
+Para troca de informações entre os dispositivos, foram definidos comandos. Cada informação é enviada com 1 byte, onde os três bits mais significativos indicam um comando:
 
-#### Clear Display
-| E | RS | RW | DB7 | DB6 | DB5 | D4 | DB3 | DB2 | DB1 | DB0 |
-| - | - | - | - | - | - | - | - | - | - | - |
-| ⎍ | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| B2 | B1 | B0 | Descrição |
+| - | - | - | - |
+| 0 | 0 | 1 | Solicita status da NodeMCU |
+| 0 | 1 | 0 | Solicita status do sensor | 
+| 0 | 1 | 1 | Solicita valor do sensor | 
 
-#### Return Home
-| E | RS | RW | DB7 | DB6 | DB5 | D4 | DB3 | DB2 | DB1 | DB0 |
-| - | - | - | - | - | - | - | - | - | - | - |
-| ⎍ | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | - |
-
-#### Cursor Shift
-
-| E | RS | RW | DB7 | DB6 | DB5 | D4 | DB3 | DB2 | DB1 | DB0 |
-| - | - | - | - | - | - | - | - | - | - | - |
-| ⎍ | 0 | 0 | 0 | 0 | 0 | 1 | S/C | R/L | - | - |
-
-S/C = 1 - Desloca Display
-S/C = 0 - Move Cursor
-R/L = 1 - Desloca a direita
-R/L = 0 - Desloca a esquerda
+Já os bits mais significativos B7-B3, indicam qual sensor vai ser executado o comando: 0 - 31 (32 sensores).
 
 
 # Arquitetura
