@@ -1,8 +1,3 @@
-/*
-	UART communication on Raspberry Pi using C (WiringPi Library)
-	http://www.electronicwings.com
-*/
-
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
@@ -21,7 +16,9 @@ extern void clear_display();
 int FLAG_READ = 0;
 char key[6] = {'u', 'n', 'l', 'o', 'c', 'k'};
 
-
+/**
+ * Initialize Uart
+ */ 
 int init_uart(){
     int serial_port = serialOpen("/dev/ttyS0", BAUD_RATE);
     if (serial_port < 0) {
@@ -35,6 +32,21 @@ int init_uart(){
     }
     return serial_port;
 }
+
+/**
+ * Wait uart response
+ */
+int busy_wait(int serial_port){
+    int t = 0;
+    while(!serialDataAvail(serial_port) && t < 1e9) t++; 
+    if(t >= 1e9) {
+        printf("Timeout...\n");
+        return 0;
+    }
+    return serialDataAvail;
+}
+
+
 
 int main()
 {
@@ -55,33 +67,34 @@ int main()
         }
     }
     printf("Secret code found\n");
-
-    int t = 0;
-    int wait = 0;
-    struct timespec tim;
+ 
     while(1){
         printf("Digite um comando: ");
         int cmd;
         scanf("%d", &cmd);
         clear_display();
         char byte = cmd;
-        wait = 1;
         serialPutchar(serial_port, byte);
-        while(wait){
-            t++;
-            if(t > 1e9) {
-                printf("Timeout...\n");
-                wait = 0;
-            }
-            if(!serialDataAvail(serial_port)) continue;
-            while(serialDataAvail(serial_port)){
-                char byte = serialGetchar(serial_port);
-                if(byte >= '0' && byte <= '9')
-                    write_char(byte);
-                printf("Response: %d\n", byte);
-            }
-            wait = 0;
+        int response = busy_wait(serial_port);
+        if(!response) continue;
+        clear_display();
+        
+        char *msg = "sensor ";
+        for(int i=0;i<7;i++) write_char(msg[i]);
+        write_char('0' + (cmd>>3)/10);
+        write_char('0' + (cmd>>3)%10);
+        for(int i=0;i<11;i++) write_char(' ');
+        *msg = "valor "
+        for(int i=0;i<6;i++) write_char(msg[i]);
+
+        while(serialDataAvail(serial_port)){
+            char byte = serialGetchar(serial_port);
+            if(byte >= '0' && byte <= '9')
+                write_char(byte);
+            if(byte >= 0 && byte <= 9)
+                write_char(byte+'0');
+            printf("Response: %d\n", byte);
         }
-        t = 0;
+      
     }
 }
