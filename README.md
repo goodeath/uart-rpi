@@ -170,8 +170,7 @@ Por fim, requisita-se os dados devolvidos pela NodeMCU e printa-se na tela do vi
 
 
 # Resultados
-
-![contagem ocorrendo](https://i.imgur.com/CU5IrQK.mp4)
+![ezgif com-gif-maker](https://user-images.githubusercontent.com/26310730/200437854-fd1294f9-dee1-4beb-9a84-4857ef3f05ec.gif)
 
 O protótipo construído é um sistema digital utilizando plataformas de desenvolvimento IoT, em que se pode adicionar até 32 sensores analógicos e/ou digitais e exibir as respectivas informações em um display de LCD.
 
