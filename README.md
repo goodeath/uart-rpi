@@ -139,14 +139,19 @@ A comunicação serial é iniciada com a taxa de transmissão de 9600. São defi
 	<img src="https://user-images.githubusercontent.com/88406625/200452619-ec20f118-ac43-4ac0-a9b2-e368e42cc5ff.png">
 </p>
 
-Após iniciar o wi-fi, a comunicação _wireless_ é ativada. Neste processo, o LED recebe um impulso de nível lógico alto para confirmar que a NodeMCU está em execução. Porém, neste processo inicial, a placa transmite caracteres aleatórios para a UART. Tais caracteres poderiam corromper a intercomunicação entre NodeMCU e Raspberry. Devido a isso, é enviado para a UART uma palavra-chave definida como 'UNLOCK', pois a partir deste código, pode-se assegurar que qualquer dado transmitido pela ESP dependerá somente do programa.
+Após iniciar o wi-fi, a comunicação _wireless_ é ativada. Neste processo, o LED recebe um impulso de nível lógico alto para confirmar que a NodeMCU está em execução. Porém, neste processo inicial, a placa transmite caracteres aleatórios para a UART. Tais caracteres poderiam corromper a intercomunicação entre NodeMCU e Raspberry. Devido a isso, é enviado para a UART uma palavra-chave definida como 'UNLOCK', pois, a partir deste código, pode-se assegurar que qualquer dado transmitido pela ESP dependerá somente do programa.
 
 <p align="center">
 	<img src="https://user-images.githubusercontent.com/88406625/200452199-c7eaecf3-5d3e-4a1c-8dc1-3728507713e6.png">
 </p>
 
-Por fim, o programa permanece em _looping_ esperando as requisições feitas pela raspberry. Inicialmente, é feito uma leitura (_digitalRead_ para os sensores digitais e _analogRead_ para os sensores analógicos) dos sensores pinados anteriormente. Os dados obtidos pela leitura é armazenado no vetor que registra os valores dos sensores. Em sequência, verifica se a comunicação serial está disponível e lê o caractere enviado no processo. Este caractere representa (ou deve representar) o comando solicitado pelo usuário e o tipo de sensor que se deseja obter as informações. Dessa forma, chama-se a função **_extract_cmd_** explicada anteriormente para verificar se o comando repassado é válido e, logo em seguida, chama-se a função **_extract_sensor_** para obter o valor atual do sensor escolhido. 
+Finalmente, o programa permanece em _looping_ esperando as requisições feitas pela raspberry. Inicialmente, é feito uma leitura (_digitalRead_ para os sensores digitais e _analogRead_ para os sensores analógicos) dos sensores pinados anteriormente. Os dados obtidos pela leitura é armazenado no vetor que registra os valores dos sensores. Em sequência, verifica se a comunicação serial está disponível e lê o caractere enviado no processo. Este caractere representa (ou deve representar) o comando solicitado pelo usuário e o tipo de sensor que se deseja obter as informações. Dessa forma, chama-se a função **_extract_cmd_** explicada anteriormente para verificar se o comando repassado é válido e, logo em seguida, chama-se a função **_extract_sensor_** para obter o valor atual do sensor escolhido. 
 
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/200454844-1a0146ce-2a99-46d1-880a-c10d9e347fc6.png">
+</p>
+
+Por fim, o NodeMCU escreve em TX o dado correspondente ao comando solicitado. Caso 'cmd' (comando) seja equivalente ao comando de status da ESP, é enviado o valor 0 para a UART. Se 'cmd' equivaler a solicitação de status, o valor de status armazenado no vetor de status é retornado. Por último, caso 'cmd' seja equivalente ao comando de valor de sensor, utiliza-se o dado armazenado no vetor de valores.
 
 ## Raspberry PI
 
