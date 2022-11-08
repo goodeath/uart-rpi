@@ -119,11 +119,25 @@ O código '0b001' representa o estado atual da própria placa NodeMCU, '0b010' o
 	<img src="https://user-images.githubusercontent.com/88406625/200446581-f5f8a459-db23-4802-af26-3bad0c3c2fc9.png">
 </p>
 
-A função _**extract_cmd**_ é utilizada para verificar se o suposto comando enviado da Raspberry para o NodeMCU coincide com os comandos pré-estabelecidos. O algoritmo se resume a uma simples comparação do comando enviado, que é tratado com uma operação AND entre a palavra recebida e o resultado da operação de deslocamento para esquerda com o número 1 (conforme o índice atual do laço de repetição), com o vetor que armazena todos os comandos válidos. 
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/200449275-989e97ae-9513-48a2-be03-5fe9fb7266be.png">
+</p>
+
+A função _**extract_cmd**_ é utilizada para verificar se o suposto comando enviado da Raspberry para o NodeMCU coincide com os comandos pré-estabelecidos. O algoritmo se resume a uma simples comparação do comando enviado, que é tratado com uma operação AND entre a palavra recebida e o resultado da operação de deslocamento para esquerda com o número 1 (conforme o índice atual do laço de repetição), com o vetor que armazena todos os comandos válidos. Já a função **_extract_sensor_** é utilizada para extrair o valor do sensor a partir do deslocamento em 3 posições a direita da palavra recebida.
+
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/200450007-dd6acdd0-4f4d-4c9d-94ae-3c4a8848dd7b.png">
+</p>
+
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/200450007-dd6acdd0-4f4d-4c9d-94ae-3c4a8848dd7b.png">
+</p>
+
+A comunicação serial é iniciada com a taxa de transmissão de 9600. São definidos 4 pinos: 3 de entrada (D1, D2 e A0), que correspondem respectivamente, aos sensores digitais e o sensor analógico, e um 1 pino de saída (D0).
 
 ## Raspberry PI
 
-Pode-se emitir os comandos através do terminal, onde são enviados e processados pela NodeMCU através de comunicação serial utilizando o protocolo UART. Como o processo é assíncrono, é realizada uma espera ocupada de até 1 segundo (aproximadamente), de forma que se não houver nenhum tipo de resposta, é dado como um erro de tempo excedido (timeout).  vez que a informação retorne, ela é exibida no terminal e no display de LCD caso esteja conectado.
+Pode-se emitir os comandos através do terminal, onde são enviados e processados pela NodeMCU através de comunicação serial utilizando o protocolo UART. Como o processo é assíncrono, é realizada uma espera ocupada de até 1 segundo (aproximadamente), de forma que se não houver nenhum tipo de resposta, é dado como um erro de tempo excedido (timeout).  vez que a informação retorne, ela é exibida no terminal e no display de LCD caso esteja conectado. Em sequência, o modo de wi-fi é definido para modo de estação,
 
 
 Para estabelecer a comunicação UART, utilizam-se as bibliotecas _wiringPi_ e _wiringSerial_ dedicadas a mapeamento de GPIOs em hardwares Raspberry. A taxa de transmissão é definida como 9600. A imagem abaixo ilustra a função responsável por mapear e retornar o valor da porta serial que representa a mini UART.
