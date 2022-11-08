@@ -122,7 +122,7 @@ Para estabelecer a comunicação UART, utilizam-se as bibliotecas _wiringPi_ e _
 	<img src="https://user-images.githubusercontent.com/88406625/200328393-a4d69181-1198-4f27-a3ae-87d95cec8df1.png" title="Mapeamento da UART">
 </p>
 
-A partir da instrução _serialOpen_ é possível obter o endereço através da porta **ttyS0** a qual a UART está atribuída, este, é salvo na variável inteira _serial_port_. Caso o valor obtido seja negativo, isso significa que não foi possível abrir o dispositivo conectado, uma mensagem de enviada ao usuário e a função é encerrada. Outro possível erro é falhar em abrir a biblioteca _wiringPI_, o qual pode ser detectado através do valor '-1' ao chamar a instrução _wiringPiSetup_. Uma vez que se obtém a porta com sucesso, isto é, sem falhas associadas a comunicação ou a biblioteca em si, o valor é retornado.
+A partir da instrução _serialOpen_ é possível obter o endereço através da porta **ttyS0** a qual a UART está atribuída, este, é salvo na variável inteira _serial_port_. Caso o valor obtido seja negativo, isso significa que não foi possível abrir o dispositivo conectado, uma mensagem é enviada ao usuário e a função é encerrada. Outro possível erro é falhar em abrir a biblioteca _wiringPI_, o qual pode ser detectado através do valor '-1' ao chamar a instrução _wiringPiSetup_. Uma vez que se obtém a porta com sucesso, isto é, sem falhas associadas a comunicação ou a biblioteca em si, o valor é retornado.
 
 Após o mapeamento feito anteriormente, já é possível realizar a comunicação serial. Porém, antes de tudo, é necessário realizar um tratamento de dados indesejáveis que são lançados aleatoriamente durante a execução da NodeMCU.
 
