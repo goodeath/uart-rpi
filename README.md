@@ -107,7 +107,13 @@ Como mostrado na figura, temos a SBC controlando a exibição de informações n
 # Funcionamento
 
 ## NodeMCU
-Os valores dos sensores e seus status foram armazenados em dois vetores de 32 posições. Uma vez que a informação está presente, é recuperada de maneira genérica pela estrutura da informação, onde é separado informação e sensor associado. Desta forma, caso se queira adicionar um novo sensor, basta garantir que a informação vai estar presente na posição escolhida para o mesmo.
+Neste programa, o NodeMCU funciona de forma passiva, isto é, ele apenas devolve informações ao UART do raspberry conforme as requisições da SBC (Single Board Computer) controlada pelo usuário. Na imagem abaixo, ilustra-se 3 constantes que representam 3 informações as quais o usuário pode exigir:
+
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/200445875-42a3233b-4af5-4ef3-87cb-f41da93fa403.png">
+</p>
+
+O código '0b001' representa o estado atual da própria placa NodeMCU, '0b010' o estado atual do sensor e '0b011' o valor atual registrado pelo sensor. Os valores dos sensores e seus status foram armazenados em dois vetores de 32 posições. Uma vez que a informação está presente, é recuperada de maneira genérica pela estrutura da informação, onde é separado informação e sensor associado. Desta forma, caso se queira adicionar um novo sensor, basta garantir que a informação vai estar presente na posição escolhida para o mesmo.
 
 A NodeMCU fica constantemente ouvindo o seu canal RX, e toda vez que recebe um pedido, efetua os procedimentos anteriores para retornar a resposta.
 
