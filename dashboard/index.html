@@ -3,6 +3,51 @@
 		<meta charset="utf-8">
 		<script src="./mqttws31.min.js" type="text/javascript"></script>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<script>
+			// Constants
+			const IS_PROD = false;
+			const MQTT_HOST = IS_PROD ? '10.0.0.101' : '127.0.0.1';
+			const MQTT_PORT = IS_PROD ? 9001 : 9001;
+			const MQTT_USER = IS_PROD ? 'aluno' : '';
+			const MQTT_PASS = IS_PROD ? '@luno*123' : '';
+			const TOPIC_SENSOR_UPDATE = 'sensors/update';
+			const TOPIC_SENSOR_FREQUENCY = 'sensors/set_frequency';
+
+
+			// MQTT Handlers of events
+			const onMessageArrived = function(data) {
+				const topic = data.destinationName;
+				const info = data._getPayloadString();
+				if(topic != TOPIC_SENSOR_UPDATE) return ;
+
+				const json = JSON.parse(info);
+				const dataset = json.dataset.map( (set) => {
+					return {
+						label: set.name,
+						data: set.values
+					}
+				});
+				removeData(chart);
+				addData(chart, json.labels, dataset);
+			}
+
+			const onConnect = () => {
+				console.log("Connected");
+				mqtt.subscribe(TOPIC_SENSOR_UPDATE, { 
+					onSuccess: () => console.log(`Subscribe to ${TOPIC_SENSOR_UPDATE}`)
+				});
+			}
+			// Initialize MQTT
+			const mqtt = new Paho.MQTT.Client(MQTT_HOST, MQTT_PORT, "clientjs");
+			mqtt.onMessageArrived = onMessageArrived;
+			mqtt.connect({
+				userName: MQTT_USER,
+				password: MQTT_PASS, 
+				timeout: 3,
+				onSuccess: onConnect
+			});
+
+		</script>
 
 	</head>
 	<body>
@@ -12,43 +57,15 @@
 		<canvas id="myChart"></canvas>
 
 		<script>
+			// Set ESP8266 frequency
 			const el = document.getElementById("freq");
 			el.addEventListener('click', function(evt) {
 				const field = document.getElementById("val");
 				const value = field.value;
-				mqtt.publish('sensor/set_frequency', value);
+				mqtt.send(TOPIC_SENSOR_FREQUENCY, value);
 			});
-			const onConnect = () => {
-				console.log("Connected");
-				mqtt.subscribe('sensors/update', { onSuccess: () => console.log("Subscribe to sensors/update")});
-			}
-			const onMessageArrived = function(data) {
-				const topic = data.destinationName;
-				const info = data._getPayloadString();
-				console.log(topic,info);
-				if(topic != 'sensors/update') return ;
-				const json = JSON.parse(info);
-				let labels = json.labels;
-				const dataset = json.dataset.map( (set) => {
-					return {
-						label: set.name,
-						data: set.values
-					}
-				});
-				removeData(chart);
-				addData(chart, labels, dataset);
-			}
-			//const host = '10.0.0.101';
-			const host = '127.0.0.1';
-			const mqtt = new Paho.MQTT.Client(host, 9001, "clientjs");
-			mqtt.onMessageArrived = onMessageArrived;
-			mqtt.connect({
-				//userName: 'aluno',
-				//password:"@luno*123", 
-				timeout: 3, 
-				onSuccess: onConnect
-			});
-			//mtt.connect({timeout: 3, onSuccess: onConnect});
+			
+			// Chart.js 
 			const ctx = document.getElementById('myChart');
 			const generateLabels = () => [...'abced'];
 			const generateData = () => Array(5).fill(' ').map( e => Math.floor(Math.random()*100));
