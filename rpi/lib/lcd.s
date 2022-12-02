@@ -9,6 +9,13 @@
 
 .macro pulse 
     TurnOn E
+    nanosleep timespec02 timespec52 // 5 ms
+    TurnOff E
+    nanosleep timespec02 timespec52    // 5ms // 5ms   // 5ms // 5ms
+.endm
+
+.macro pulse2
+    TurnOn E
     nanosleep timespec0 timespec5 // 5 ms
     TurnOff E
     nanosleep timespec0 timespec5    // 5ms // 5ms   // 5ms // 5ms
@@ -63,6 +70,14 @@ write_data_4bits:
     LDR R0, =\value
     BL write_data_4bits
     pulse
+    POP {LR}
+.endm
+
+.macro write_4biti value
+    PUSH {LR}
+    LDR R0, =\value
+    BL write_data_4bits
+    pulse2
     POP {LR}
 .endm
 
@@ -185,41 +200,42 @@ init:
     // Step 1
     @nanosleep timesz timenz
     
-    write_4bit #0x3
-    write_4bit #0x3
-    write_4bit #0x3
-    write_4bit #0x2
-    write_4bit #0x2
-    write_4bit #0x8
-    write_4bit #0x0
-    write_4bit #0x8
+    write_4biti #0x3
+    write_4biti #0x3
+    write_4biti #0x3
+    write_4biti #0x2
+    write_4biti #0x2
+    write_4biti #0x8
+    write_4biti #0x0
+    write_4biti #0x8
 
     nanosleep t1s timespecnano0 // 5ms
     nanosleep t1s timespecnano0 // 5ms
     .ltorg
 
-    write_4bit #0x0
-    write_4bit #0x1
+    write_4biti #0x0
+    write_4biti #0x1
 
     nanosleep ts0 tms10  // 5ms
 
-    write_4bit #0x0
-    write_4bit #0x6
+    write_4biti #0x0
+    write_4biti #0x6
 
     nanosleep ts0 tms10  // 5ms
 
-    write_4bit #0x0
-    write_4bit #0xF
+    write_4biti #0x0
+    write_4biti #0xF
     POP {PC}
 
 .data
 timespec0: .word 0
-timespec5: .word 5000000  
+timespec5: .word 1000000  
 t1s: .word 1
 timespecnano0: .word 0
 ts0: .word 0
 tms10: .word 10000000
-
+timespec02: .word 0
+timespec52: .word 750000  
 devmem: .asciz "/dev/mem"
 @memOpnErr: .asciz "Failed to open /dev/mem\n"
 @memOpnsz: .word .-memOpnErr
