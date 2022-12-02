@@ -107,13 +107,55 @@ Como mostrado na figura, temos a SBC controlando a exibição de informações n
 # Funcionamento
 
 ## NodeMCU
-Os valores dos sensores e seus status foram armazenados em dois vetores de 32 posições. Uma vez que a informação está presente, é recuperada de maneira genérica pela estrutura da informação, onde é separado informação e sensor associado. Desta forma, caso se queira adicionar um novo sensor, basta garantir que a informação vai estar presente na posição escolhida para o mesmo.
+Neste programa, o NodeMCU funciona de forma passiva, isto é, ele apenas devolve informações ao UART do raspberry conforme as requisições da SBC (Single Board Computer) controlada pelo usuário. A NodeMCU fica constantemente ouvindo o canal RX, e toda vez que recebe um pedido, efetua os procedimentos anteriores para retornar a resposta. Na imagem abaixo, ilustra-se 3 constantes que representam 3 informações as quais o usuário pode exigir:
 
-A NodeMCU fica constantemente ouvindo o seu canal RX, e toda vez que recebe um pedido, efetua os procedimentos anteriores para retornar a resposta.
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/200445875-42a3233b-4af5-4ef3-87cb-f41da93fa403.png">
+</p>
+
+O código '0b001' representa o estado atual da própria placa NodeMCU, '0b010' o estado atual do sensor e '0b011' o valor atual registrado pelo sensor. Os valores dos sensores e seus status são armazenados em dois vetores de 32 posições. Uma vez que a informação está presente, é recuperada de maneira genérica pela estrutura da informação, onde é separado informação e sensor associado. Desta forma, caso se queira adicionar um novo sensor, basta garantir que a informação vai estar presente na posição escolhida para o mesmo. Todos estas constantes são salvas no vetor de comandos. O objetivo deste vetor é generalizar o código pra qualquer número de novas requisições que se deseje adicionar ao NodeMCU. Dessa forma, basta adicionar o novo comando ao vetor sem a necessidade de alterar o resto do código.
+
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/200446581-f5f8a459-db23-4802-af26-3bad0c3c2fc9.png">
+</p>
+
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/200449275-989e97ae-9513-48a2-be03-5fe9fb7266be.png">
+</p>
+
+A função _**extract_cmd**_ é utilizada para verificar se o suposto comando enviado da Raspberry para o NodeMCU coincide com os comandos pré-estabelecidos. O algoritmo se resume a uma simples comparação do comando enviado, que é tratado com uma operação AND entre a palavra recebida e o resultado da operação de deslocamento para esquerda com o número 1 (conforme o índice atual do laço de repetição), com o vetor que armazena todos os comandos válidos. Já a função **_extract_sensor_** é utilizada para extrair o valor do sensor a partir do deslocamento em 3 posições a direita da palavra recebida.
+
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/200451377-4cb0256e-866f-4f9f-b21a-58ec105fe9c6.png">
+</p>
+
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/200450007-dd6acdd0-4f4d-4c9d-94ae-3c4a8848dd7b.png">
+</p>
+
+A comunicação serial é iniciada com a taxa de transmissão de 9600. São definidos 4 pinos: 3 de entrada (D1, D2 e A0), que correspondem respectivamente, aos sensores digitais e o sensor analógico, e um 1 pino de saída (D0), que corresponde a um LED. Em sequência, o wi-fi é definido no modo de estação e é iniciado com a senha e o identificador de serviço (**ssid**) definidos anteriormente. Caso não haja conexão por parte do wi-fi, é realizado um pequeno _sleeping_ no programa e a placa é reiniciada.
+
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/200452619-ec20f118-ac43-4ac0-a9b2-e368e42cc5ff.png">
+</p>
+
+Após iniciar o wi-fi, a comunicação _wireless_ é ativada. Neste processo, o LED recebe um impulso de nível lógico alto para confirmar que a NodeMCU está em execução. Porém, neste processo inicial, a placa transmite caracteres aleatórios para a UART. Tais caracteres poderiam corromper a intercomunicação entre NodeMCU e Raspberry. Devido a isso, é enviado para a UART uma palavra-chave definida como 'UNLOCK', pois, a partir deste código, pode-se assegurar que qualquer dado transmitido pela ESP dependerá somente do programa.
+
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/200452199-c7eaecf3-5d3e-4a1c-8dc1-3728507713e6.png">
+</p>
+
+Finalmente, o programa permanece em _looping_ esperando as requisições feitas pela raspberry. Inicialmente, é feito uma leitura (_digitalRead_ para os sensores digitais e _analogRead_ para os sensores analógicos) dos sensores pinados anteriormente. Os dados obtidos pela leitura é armazenado no vetor que registra os valores dos sensores. Em sequência, verifica se a comunicação serial está disponível e lê o caractere enviado no processo. Este caractere representa (ou deve representar) o comando solicitado pelo usuário e o tipo de sensor que se deseja obter as informações. Dessa forma, chama-se a função **_extract_cmd_** explicada anteriormente para verificar se o comando repassado é válido e, logo em seguida, chama-se a função **_extract_sensor_** para obter o valor atual do sensor escolhido. 
+
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/200454844-1a0146ce-2a99-46d1-880a-c10d9e347fc6.png">
+</p>
+
+Por fim, o NodeMCU escreve em TX o dado correspondente ao comando solicitado. Caso 'cmd' (comando) seja equivalente ao comando de status da ESP, é enviado o valor 0 para a UART. Se 'cmd' equivaler a solicitação de status, o valor de status armazenado no vetor de status é retornado. Por último, caso 'cmd' seja equivalente ao comando de valor de sensor, utiliza-se o dado armazenado no vetor de valores.
 
 ## Raspberry PI
 
-Pode-se emitir os comandos através do terminal, onde são enviados e processados pela NodeMCU através de comunicação serial utilizando o protocolo UART. Como o processo é assíncrono, é realizada uma espera ocupada de até 1 segundo (aproximadamente), de forma que se não houver nenhum tipo de resposta, é dado como um erro de tempo excedido (timeout).  vez que a informação retorne, ela é exibida no terminal e no display de LCD caso esteja conectado.
+Pode-se emitir os comandos através do terminal, onde são enviados e processados pela NodeMCU através de comunicação serial utilizando o protocolo UART. Como o processo é assíncrono, é realizada uma espera ocupada de até 1 segundo (aproximadamente), de forma que se não houver nenhum tipo de resposta, é dado como um erro de tempo excedido (timeout).  vez que a informação retorne, ela é exibida no terminal e no display de LCD caso esteja conectado. Em sequência, o modo de wi-fi é definido para modo de estação,
 
 
 Para estabelecer a comunicação UART, utilizam-se as bibliotecas _wiringPi_ e _wiringSerial_ dedicadas a mapeamento de GPIOs em hardwares Raspberry. A taxa de transmissão é definida como 9600. A imagem abaixo ilustra a função responsável por mapear e retornar o valor da porta serial que representa a mini UART.
