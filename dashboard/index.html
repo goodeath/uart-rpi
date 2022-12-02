@@ -12,23 +12,32 @@
 			const MQTT_PASS = IS_PROD ? '@luno*123' : '';
 			const TOPIC_SENSOR_UPDATE = 'sensors/update';
 			const TOPIC_SENSOR_FREQUENCY = 'sensors/set_frequency';
-
-
+			let previous = Date.now();
+			let json = '';
 			// MQTT Handlers of events
 			const onMessageArrived = function(data) {
 				const topic = data.destinationName;
 				const info = data._getPayloadString();
+				//console.log(topic,"@"+info+"@");;
 				if(topic != TOPIC_SENSOR_UPDATE) return ;
-
-				const json = JSON.parse(info);
-				const dataset = json.dataset.map( (set) => {
-					return {
-						label: set.name,
-						data: set.values
+				if(info == 'DONE'){
+					if(Date.now() - previous < 1000) return;
+					else previous = Date.now();
+					try{
+						json = JSON.parse(json);
+						console.log(json);
+						const dataset = json.dataset.map( (set) => {
+							return {
+								label: set.name,
+								data: set.values
+							}
+						});
+						removeData(chart);
+						addData(chart, json.labels, dataset);
+					} catch(e){
 					}
-				});
-				removeData(chart);
-				addData(chart, json.labels, dataset);
+					json = '';
+				} else json += info;
 			}
 
 			const onConnect = () => {
