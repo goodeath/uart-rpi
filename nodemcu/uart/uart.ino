@@ -7,15 +7,15 @@
 #include "Adafruit_MQTT_Client.h"
 
 int INSIDE_LAB = 0;
-#define AIO_SERVER      "192.168.1.2"
+#define AIO_SERVER      INSIDE_LAB ? "10.0.0.101" : "192.168.1.3"
 #define AIO_SERVERPORT  1883                 // use 8883 for SSL
 #define AIO_USERNAME    INSIDE_LAB ? "aluno" : ""
 #define AIO_KEY         INSIDE_LAB ? "@luno*123" : ""
 
 WiFiClient client;
 Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO_KEY);
-Adafruit_MQTT_Publish pub_sensor_update = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "sensors/update");
-Adafruit_MQTT_Subscribe sub_sensor_frequency = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "sensors/set_frequency");
+Adafruit_MQTT_Publish pub_sensor_update = Adafruit_MQTT_Publish(&mqtt,  "sensors/update");
+Adafruit_MQTT_Subscribe sub_sensor_frequency = Adafruit_MQTT_Subscribe(&mqtt, "sensors/set_frequency");
 void MQTT_connect();
 String convert_intr_to_json(int *arr, int n);
 
