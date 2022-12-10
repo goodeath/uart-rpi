@@ -120,11 +120,6 @@ Além de contar com os pinos para comunicação UART com a Node MCU, agora utili
 | - | 19 | BTN |
 | - | 26 | BTN |
 
-
-### Rotina de Inicialização
-
-Devido a alguns lixos gerados na saída serial da NodeMCU foi realizado um processo de inicialização. Quando a raspberry pi inicia, fica aguardando o envio de um conjunto de palavras em sequência específica para identificar que a inicialização foi feita com sucesso. 
-
 # Comandos
 Para troca de informações entre os dispositivos, foram definidos comandos. Cada informação é enviada com 1 byte, onde os três bits menos significativos indicam um comando:
 
@@ -138,7 +133,7 @@ Os bits mais significativos B7-B3, indicam qual sensor vai ser executado o coman
 
 
 # Arquitetura
-Como mostrado na figura, temos a SBC controlando a exibição de informações no display, enquanto se comunica através da uart com a NodeMCU que possui e faz a aquisição dos dados dos sensores.
+Em relação ao projeto anterior, manteve-se a conexão via UART entre a SBC e a node MCU. O que mudou foi a adição de novos dados sendo passados e o protocolo MQTT estabelecido entre a Node e a interface local, intermediada pelo broker do laboratório.
 
 <p align="center">
 	<img src="https://user-images.githubusercontent.com/88406625/206821300-396da649-2ab6-47a5-a76c-c27b5aeed07d.png">
