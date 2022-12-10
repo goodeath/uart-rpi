@@ -195,6 +195,30 @@ A constante **_onConnect_** é útil para estabelecer a interface remota como _s
 
 Por fim, estabelece-se a conexão MQTT passando os parâmetros de host e porta definidos anteriormente. Em caso de uma mensagem recebida, chama-se a constante **_onMessageArrived_** para obter os nomes e valores de sensores explicados anteriormente. Por fim, a conexão é efetivamente iniciada em **_mqtt.connect_**, passando os parâmetros de usuários e senha. Caso haja conexão, a constante **_onConnect_** é chamada para inscrever a interface ao tópico.
 
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/206819063-cb68d9d4-5f1d-49b0-856b-f19507d1e514.png">
+</p>
+
+Neste ponto, cria-se na interface uma caixa de input. Nela, o usuário digita o valor da frequência que será enviado ao node mcu. Em seguida, e logo abaixo na interface, cria-se um canvas, corpo de HTML que permite edição de javascript. Neste canvas é implementado o gráfico do histórico de valor dos sensores.
+
+Na área de script, adiciona um evento de **_listening_** para o formulário de frequência. A cada vez que o usuário atualiza o valor vingente, o programa resgata tal valor e o publica no tópico de frequência utilizando a função **_mqtt.send**.
+
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/206819505-594df292-9c49-4b2c-8aca-9418782fc478.png">
+</p>
+
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/206819543-5de759bc-5ad4-4fbe-8b49-e44e48b40a4a.png">
+</p>
+
+Em sequência, cria-se o gráfico utilizando a biblioteca Chart na área do canvas. Inicialmente, o gráfico é preenchido com valores aleatórios, apenas para ocupar a tela enquanto os valores da conexão não são recebidos.
+
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/206819657-58c73d9f-6fe2-4260-8648-5c5b004f5b98.png">
+</p>
+
+Por fim, têm-se as duas funções citadas anteriormente. A função **_addData_** substitui os _labels_ do gráfico pelo vetor que armazena os nomes de todos os sensores conectados a node mcu e atualiza os dados pelos respectivos valores temporais de cada sensor. Já a função **_removeData_** apenas esvazia os registros do gráfico, esvaziando os vetores.
+
 # Como executar
 
 ### UART - Raspberry Pi
