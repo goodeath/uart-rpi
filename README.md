@@ -116,6 +116,9 @@ Baseada no processador [BCM 2385](https://datasheets.raspberrypi.com/bcm2835/bcm
 | - | - | - |
 | 8 | 14 | TX |
 | 10 | 15 | RX |
+| - | 5 | BTN |
+| - | 19 | BTN |
+| - | 26 | BTN |
 
 
 ### Rotina de Inicialização
