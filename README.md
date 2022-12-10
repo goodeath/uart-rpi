@@ -167,7 +167,33 @@ Uma vez na tela de status da node (2), os botões de avanço e recuo são inúte
 
 Por fim, na tela de status de sensor (3), repete-se a mesma lógica utilizada no modo de sensor, botão 19 para recuo, 26 para avanço, chama a função específica para esta operação e retorna o comando a node mcu através da UART.
 
+## Interface Remota
 
+A interface remota foi feita em linguagem de marcação HTML e programação em javascript.
+
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/206814111-7f3c17d6-88d5-49f6-be32-147a70c22e22.png">
+</p>
+
+Inicialmente se define os parâmetros da conexão em MQTT. Os valores para host, porta, usuário e senha foram pré-definidos no _broker_ do laboratório LEDS. Após isso cria-se 2 tópicos, um para atualização dos sensores (lê (subscriber) o valor e os nomes do sensores publicados (publisher) pela Node MCU) e outro para alterar a frequência (publisher). 
+
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/206814911-aacbcf32-d775-4c98-9493-8e0d2f03ea89.png">
+</p>
+
+A constante **_onMessageArrived_** é utilizada para obter os dados dos sensores da Node MCU. Inicialmente, obtém-se o nome do tópico e status da conexão. Caso o tópico corresponda ao tópico de atualização e a conexão esteja habilitada, a condição é atendida. Em seguida, obtém o valor da data atual, exclui-se a primeira data registrada na conexão (a mais antiga) e atualiza o histórico para as 10 mais novas (com a atual). A informação da conexão é parseada para o formato _json_, de modo a utilizar a função map e obter um array de objetos contendo o atributo label (nome do sensor) e data (valor do sensor). Por fim, limpa-se o gráfico em **_removeCharts_** e adiciona os novos dados em **_addData_**. Tais funções serão explicadas posteriormente.
+
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/206818257-6cb289e1-b370-4f50-8b2c-1704314717b6.png">
+</p>
+
+A constante **_onConnect_** é útil para estabelecer a interface remota como _subscriber_ do tópico de atualização. Utiliza-se a biblioteca PAHO para utilizar as funções do protocolo MQTT. Aqui chama-se a função **_mqtt.subscribe_** para inscrever-se no tópico de atualização e lança uma mensagem caso haja conexão.
+
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/206818708-bde18080-1e4c-4ba2-9d89-ea37ba6401d3.png">
+</p>
+
+Por fim, estabelece-se a conexão MQTT passando os parâmetros de host e porta definidos anteriormente. Em caso de uma mensagem recebida, chama-se a constante **_onMessageArrived_** para obter os nomes e valores de sensores explicados anteriormente. Por fim, a conexão é efetivamente iniciada em **_mqtt.connect_**, passando os parâmetros de usuários e senha. Caso haja conexão, a constante **_onConnect_** é chamada para inscrever a interface ao tópico.
 
 # Como executar
 
