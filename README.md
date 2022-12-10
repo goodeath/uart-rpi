@@ -140,7 +140,9 @@ Os bits mais significativos B7-B3, indicam qual sensor vai ser executado o coman
 # Arquitetura
 Como mostrado na figura, temos a SBC controlando a exibição de informações no display, enquanto se comunica através da uart com a NodeMCU que possui e faz a aquisição dos dados dos sensores.
 
-![image](https://user-images.githubusercontent.com/88406625/206821300-396da649-2ab6-47a5-a76c-c27b5aeed07d.png)
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/88406625/206821300-396da649-2ab6-47a5-a76c-c27b5aeed07d.png">
+</p>
 
 # Funcionamento
 
