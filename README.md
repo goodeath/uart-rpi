@@ -110,7 +110,7 @@ Alguns pinos utilizados na NodeMCU estão listados na tabela abaixo:
 
 
 ## Raspberry Pi Zero
-Baseada no processador [BCM 2385](https://datasheets.raspberrypi.com/bcm2835/bcm2835-peripherals.pdf), possui 54 I/O de propósito geral (GPIO), além daqueles utilizados para comunicação com o display, estão sendo utilizados mais dois para comunicação serial: TX/RX. É importante notar que, o GPIO 1 não está posicionado no PINO 1. As informações da placa são mostradas na tabela abaixo, junto da descrição sobre o uso de cada GPIO.
+Além de contar com os pinos para comunicação UART com a Node MCU, agora utilizam-se 3 botões para a interface local humana. A função destes botões será explicada posteriormente. 
 
 | Pino | GPIO | Descrição |
 | - | - | - |
@@ -126,7 +126,7 @@ Baseada no processador [BCM 2385](https://datasheets.raspberrypi.com/bcm2835/bcm
 Devido a alguns lixos gerados na saída serial da NodeMCU foi realizado um processo de inicialização. Quando a raspberry pi inicia, fica aguardando o envio de um conjunto de palavras em sequência específica para identificar que a inicialização foi feita com sucesso. 
 
 # Comandos
-Para troca de informações entre os dispositivos, foram definidos comandos. Cada informação é enviada com 1 byte, onde os três bits mais significativos indicam um comando:
+Para troca de informações entre os dispositivos, foram definidos comandos. Cada informação é enviada com 1 byte, onde os três bits menos significativos indicam um comando:
 
 | B2 | B1 | B0 | Descrição |
 | - | - | - | - |
