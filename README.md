@@ -4,7 +4,11 @@ O MQTT (euing Telemetry Transport) é um protocolo para comunicação de mensage
 # Estrutura do projeto
 Segue abaixo a estrutura de diretórios do projeto
 ```
-├── nodemcu
+├── dashboard
+│   └── chart.js
+│   └── index.html
+│   └── mqttws31.min.js
+├── nodemcu/uart
 │   └── uart.ino
 ├── README.md
 └── rpi
@@ -18,6 +22,7 @@ Segue abaixo a estrutura de diretórios do projeto
     │   └── utils.s
     ├── LICENSE
     ├── makefile
+    ├── system.c
     └── uart
         └── uart.c
 
