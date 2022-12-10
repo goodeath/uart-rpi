@@ -208,13 +208,30 @@ Por fim, requisita-se os dados devolvidos pela NodeMCU e printa-se na tela do vi
 ### UART - NodeMCU
 1. Na pasta nodemcu/ abra o arquivo uart.ino na Arduino IDE:
 2. Configure as bibliotecas do NodeMCU
-3. Descarregue o código na pltaforma
+3. Descarregue o código na plataforma
+
+### Testes
+
+#### Teste 1 - Código Secreto
+
+Para a Raspberry Pi se comunicar com a NodeMCU é preciso receber uma palavra chave da NodeMCU indicando uma inicialização. Devido ao fato que ao reiniciar a NodeMCU a mesma emite vários dados aleatórios nas saídas da UART.
+
+1. Inicializar o programa na Raspberry Pi
+2. Descarregar programa na NodeMCU
+3. No terminal, deve ser imprimido a mensagem: "Secret code found", indicando que a comunicação foi estabelecida
+
+
+#### Teste 2 - Transferência de Informação
+
+1. Após o Teste 1 executado, o sistema está pronto pra execução.
+2. Inserir comando: 11, para transferir a informação presente no sensor de índice 0.
+3. Caso queira inserir o valor presente na entrada D0 da NodeMCU, basta realizar: `SENSOR_VALUE[0] = digitalRead(D0)` na função de loop da NodeMCU
+4. Caso haja um nível lógico ativo, a resposta deve ser 1. Caso contrário, a resposta deve ser 0.
 
 
 # Resultados
-![ezgif com-gif-maker](https://user-images.githubusercontent.com/26310730/200437854-fd1294f9-dee1-4beb-9a84-4857ef3f05ec.gif)
 
-O protótipo construído é um sistema digital utilizando plataformas de desenvolvimento IoT, em que se pode adicionar até 32 sensores analógicos e/ou digitais e exibir as respectivas informações em um display de LCD.
+O protótipo construído é um sistema digital utilizando plataformas de desenvolvimento IoT, em que se pode adicionar até 32 sensores analógicos e/ou digitais e exibir as respectivas informações em um display de LCD. Dessa forma, através de uma estrutura genérica, a adição de novos sensores requer mínimas alterações.
 
 ## Limitações da UART
 
